@@ -4,8 +4,6 @@ public class Enemy {
     public Image pic;
     public int x;
     public int y;
-    public int dx= (int)(Math.random()*2+1);
-    public int dy= (int)(Math.random()*2+1);
     public int width=100;
     public int height=100;
     public boolean isAlive = true;
@@ -16,9 +14,19 @@ public class Enemy {
         y = paramY;
         hitBox = new Rectangle(x,y,width,height);
     }
-    public void move(){
-        x+=dx;
-        y+=dy;
+    public void move(int PlayerxPos,int PlayeryPos){
+        if(x < PlayerxPos){
+            x+=2;
+        }
+        if(x > PlayerxPos){
+            x-=2;
+        }
+        if(y < PlayeryPos){
+            y+=2;
+        }
+        if(y > PlayeryPos){
+            y-=2;
+        }
 //        for(int randNum=0;randNum<=3;randNum++){
 //            if enemies[x].randomStart=
 //        }

@@ -49,21 +49,7 @@ public class Main implements Runnable, KeyListener {
 //public SoundFile ____;
     // Main method definition
     // This is the code that runs first and automatically
-    public void pickSide(int ememiesNum) {
 
-        int r = (int) (Math.random() * 4);
-        if (r == 0) {
-            enemies[ememiesNum] = new Enemy((int) (Math.random() * 601), 0);
-        } else if (r == 1) {
-            enemies[ememiesNum] = new Enemy((int) (Math.random() * 601), 900);
-        } else if (r == 2) {
-            enemies[ememiesNum] = new Enemy(0, (int) (Math.random() * 901));
-        } else if (r == 3) {
-            enemies[ememiesNum] = new Enemy(600, (int) (Math.random() * 901));
-        }
-        enemies[ememiesNum].pic = Toolkit.getDefaultToolkit().getImage("enemy.png");
-
-    }
     public static void main(String[] args) {
         Main ex = new Main();   //creates a new instance of the game
         new Thread(ex).start();                 //creates a threads & starts up the code in the run( ) method
@@ -93,9 +79,31 @@ public class Main implements Runnable, KeyListener {
         /***
          * Step 3: fill
          */
+        for (int x=0;x<3;x++) {
+            enemies[x] = new Enemy(-100, -100);
+            enemies[x].pic = Toolkit.getDefaultToolkit().getImage("enemy.png");
+        }
 
     } // end BasicGameApp constructor
 
+    public void pickSides(int i){
+        //int r = (int)(Math.random()*4);
+        int r = 0;
+            if (r == 0) {
+                enemies[i].x = ((int) (Math.random() * 601));
+                enemies[i].y = 0;
+                System.out.println("test");
+            } else if (r == 1) {
+                enemies[i].x = ((int) (Math.random() * 601));
+                enemies[i].y = 900;
+            } else if (r == 2) {
+                enemies[i].x = 0;
+                enemies[i].y = ((int) (Math.random() * 901));
+            } else if (r == 3) {
+                enemies[i].x = 600;
+                enemies[i].y = ((int) (Math.random() * 901));
+            }
+        }
 
 //*******************************************************************************
 //User Method Section
@@ -108,30 +116,49 @@ public class Main implements Runnable, KeyListener {
         //for the moment we will loop things forever.
         //game tics?
         while (true) {
-            moveThings();  //move all the game objects
-            collisions();
+            if (gamePlaying) {
+                moveThings();  //move all the game objects
+                collisions();
+                boolean repeat1 =true;
+                boolean repeat2 =true;
+                boolean repeat3 =true;
+                timer++;
+
+                if (timer > 40000 && repeat1) {
+                    pickSides(2);
+                    repeat1 = false;
+                }
+                else if (timer > 25000 && repeat2) {
+                    pickSides(1);
+                    repeat2 = false;
+                }
+                else if (timer > 0 && repeat3) {
+                    pickSides(0);
+                    repeat3 = false;
+                }
+
+            }
             render();  // paint the graphics
             pause(10); // sleep for 10 ms
-            timer++;
-            if (timer>0){
-                pickSide(0);
-            }
-            else if (timer>1000){
-                pickSide(1);
-            }
-            else if (timer>2000){
-                pickSide(2);
-            }
+
         }
     }
 
     public void moveThings() {
         //call the move() code for each object
         player.move(700, 1000);
+        for(int x=0;x<3;x++) {
+            enemies[x].move(player.x, player.y);
+        }
+        System.out.println(enemies[0].x + ", " + enemies[0].y);
     }
 
-    public void collisions() {
-        //___.play();
+    public void collisions(){
+//        for(int x=0;x<3;x++) {
+//        if(){
+//
+//        }
+
     }
 
     //Paints things on the screen using bufferStrategy
@@ -156,6 +183,10 @@ public class Main implements Runnable, KeyListener {
             for (int x = 0; x <= 3; x++) {
                 g.drawImage(walls[x].pic, walls[x].x, walls[x].y, walls[x].width, walls[x].height, null);
                 g.drawRect(walls[x].hitBox.x, walls[x].hitBox.y, walls[x].hitBox.width, walls[x].hitBox.height);
+            }
+            for (int x = 0; x < 3; x++) {
+                g.drawImage(enemies[x].pic, enemies[x].x, enemies[x].y, enemies[x].width, enemies[x].height, null);
+                g.drawRect(enemies[x].hitBox.x, enemies[x].hitBox.y, enemies[x].hitBox.width, enemies[x].hitBox.height);
             }
 
         }//game
