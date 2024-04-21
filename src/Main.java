@@ -49,6 +49,10 @@ public class Main implements Runnable, KeyListener {
     boolean iFrames = false;
     int deadEnemies = 0;
 
+    public SoundFile grunt;
+    public SoundFile attack;
+    public SoundFile enemyDead;
+
     /*** Arrays
      * Step 1: declare
      */
@@ -89,6 +93,9 @@ public class Main implements Runnable, KeyListener {
             enemies[i] = new Enemy(-100, -100);
             enemies[i].pic = Toolkit.getDefaultToolkit().getImage("enemy.png");
         }
+        grunt =new SoundFile("grunt.wav");
+        attack = new SoundFile("Sword Whip 03.wav");
+        enemyDead = new SoundFile("Tape Start.wav");
 
     } // end BasicGameApp constructor
 
@@ -129,15 +136,15 @@ public class Main implements Runnable, KeyListener {
                 collisions();
                 timer++;
 
-                if (timer > 2000 && repeat3) {
+                if (timer > 2000 && repeat3 || deadEnemies==2) {
                     pickSides(2);
                     repeat3 = false;
                 }
-                else if (timer > 1000 && repeat2) {
+                else if (timer > 1000 && repeat2 || deadEnemies==1) {
                     pickSides(1);
                     repeat2 = false;
                 }
-                else if (timer > 0 && repeat1) {
+                else if (repeat1) {
                     pickSides(0);
                     repeat1 = false;
                 }
@@ -171,6 +178,7 @@ public class Main implements Runnable, KeyListener {
                     timeWhenHit = timer;
                     player.health -= 1;
                     iFrames = true;
+                    grunt.play();
                 }
                 if ((timer - timeWhenHit) > 65) {
                     iFrames = false;
@@ -200,7 +208,10 @@ public class Main implements Runnable, KeyListener {
             g.fillRect(0, 0, WIDTH, HEIGHT);
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
-            g.drawString("PRESS SPACE TO BEGIN", 200, 400);
+
+            g.drawString(" WASD TO MOVE", 200, 250);
+            g.drawString(" ARROW KEYS TO ATTACK",200 , 325);
+            g.drawString(" PRESS SPACE TO BEGIN", 200, 400);
         }//start screen
         else if (gamePlaying && !gameOver) {
             g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
@@ -317,7 +328,7 @@ public class Main implements Runnable, KeyListener {
         if (!gamePlaying && keyCode == 32) {
             gamePlaying=true;
         }
-        System.out.println("Key Pressed: "+key+", "+keyCode);
+//        System.out.println("Key Pressed: "+key+", "+keyCode);
     }
         // up = 38
         //down = 40

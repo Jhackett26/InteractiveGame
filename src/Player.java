@@ -50,4 +50,7 @@ public class Player {
         }
         hitBox = new Rectangle(x+25,y,width/2,height);
     }
+    public void attack(){
+        
+    }
 }
