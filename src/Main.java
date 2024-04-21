@@ -52,6 +52,11 @@ public class Main implements Runnable, KeyListener {
     public SoundFile grunt;
     public SoundFile attack;
     public SoundFile enemyDead;
+    public Sword uSword;
+    public Sword dSword;
+    public Sword lSword;
+    public Sword rSword;
+
 
     /*** Arrays
      * Step 1: declare
@@ -96,12 +101,20 @@ public class Main implements Runnable, KeyListener {
         grunt =new SoundFile("grunt.wav");
         attack = new SoundFile("Sword Whip 03.wav");
         enemyDead = new SoundFile("Tape Start.wav");
+        uSword = new Sword();
+        uSword.pic = Toolkit.getDefaultToolkit().getImage("attackU.png");
+        dSword = new Sword();
+        dSword.pic = Toolkit.getDefaultToolkit().getImage("attackD.png");
+        lSword = new Sword();
+        lSword.pic = Toolkit.getDefaultToolkit().getImage("attackL.png");
+        rSword = new Sword();
+        rSword.pic = Toolkit.getDefaultToolkit().getImage("attackR.png");
+
 
     } // end BasicGameApp constructor
 
     public void pickSides(int i){
         int r = (int)(Math.random()*4);
-//        int r = 0;
             if (r == 0) {
                 enemies[i].x = ((int) (Math.random() * 601));
                 enemies[i].y = 0;
@@ -116,6 +129,7 @@ public class Main implements Runnable, KeyListener {
                 enemies[i].y = ((int) (Math.random() * 901));
             }
         }
+
 
 //*******************************************************************************
 //User Method Section
@@ -168,6 +182,10 @@ public class Main implements Runnable, KeyListener {
         if (!repeat3){
             enemies[2].move(player.x, player.y);
         }
+        uSword.hitBox = new Rectangle(uSword.x,uSword.y,100,100);
+        dSword.hitBox = new Rectangle(dSword.x,dSword.y,100,100);
+        lSword.hitBox = new Rectangle(lSword.x,lSword.y,100,100);
+        rSword.hitBox = new Rectangle(rSword.x,rSword.y,100,100);
         //System.out.println(enemies[2].x + ", " + enemies[0].y);
     }
 
@@ -230,6 +248,22 @@ public class Main implements Runnable, KeyListener {
             for (int x = 0; x < 3; x++) {
                 g.drawImage(enemies[x].pic, enemies[x].x, enemies[x].y, enemies[x].width, enemies[x].height, null);
                 //g.drawRect(enemies[x].hitBox.x, enemies[x].hitBox.y, enemies[x].hitBox.width, enemies[x].hitBox.height);
+            }
+            if (player.upIsPressed) {
+                g.drawImage(uSword.pic, player.x, player.y-100, 100, 100, null);
+                g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+            }
+            if (player.downIsPressed) {
+                g.drawImage(dSword.pic, player.x, player.y+100, 100, 100, null);
+                g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+            }
+            if (player.leftIsPressed) {
+                g.drawImage(lSword.pic, player.x-100, player.y, 100, 100, null);
+                g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
+            }
+            if (player.rightIsPressed) {
+                g.drawImage(rSword.pic, player.x+50, player.y, 100, 100, null);
+                g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
             }
 
         }//game
@@ -316,9 +350,9 @@ public class Main implements Runnable, KeyListener {
             player.upIsPressed = true;
         }
         if (keyCode == 40) {
-            player.sIsPressed = true;
+            player.downIsPressed = true;
         }
-        if (keyCode == 65) {
+        if (keyCode == 37) {
             player.leftIsPressed = true;
         }
         if (keyCode == 39) {

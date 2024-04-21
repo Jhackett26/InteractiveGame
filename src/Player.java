@@ -18,6 +18,7 @@ public class Player {
     public boolean downIsPressed =false;
     public boolean leftIsPressed =false;
     public boolean rightIsPressed =false;
+    public boolean isAttacking = false;
     public Player(int paramX,int paramY){
         x = paramX;
         y = paramY;
@@ -49,8 +50,5 @@ public class Player {
             x = 25;
         }
         hitBox = new Rectangle(x+25,y,width/2,height);
-    }
-    public void attack(){
-        
     }
 }
