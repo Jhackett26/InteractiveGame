@@ -9,6 +9,7 @@ public class Enemy {
     public boolean isAlive = true;
     public Rectangle hitBox;
     public int randomStart;
+    public int health = 15;
     public Enemy(int paramX,int paramY){
         x = paramX;
         y = paramY;

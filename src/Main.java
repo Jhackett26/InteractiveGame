@@ -42,6 +42,9 @@ public class Main implements Runnable, KeyListener {
     public Image background;
     public Enemy[] enemies;
     public int timer;
+    boolean repeat1 =true;
+    boolean repeat2 =true;
+    boolean repeat3 =true;
 
     /*** Arrays
      * Step 1: declare
@@ -79,20 +82,19 @@ public class Main implements Runnable, KeyListener {
         /***
          * Step 3: fill
          */
-        for (int x=0;x<3;x++) {
-            enemies[x] = new Enemy(-100, -100);
-            enemies[x].pic = Toolkit.getDefaultToolkit().getImage("enemy.png");
+        for (int i=0;i<3;i++) {
+            enemies[i] = new Enemy(-100, -100);
+            enemies[i].pic = Toolkit.getDefaultToolkit().getImage("enemy.png");
         }
 
     } // end BasicGameApp constructor
 
     public void pickSides(int i){
-        //int r = (int)(Math.random()*4);
-        int r = 0;
+        int r = (int)(Math.random()*4);
+//        int r = 0;
             if (r == 0) {
                 enemies[i].x = ((int) (Math.random() * 601));
                 enemies[i].y = 0;
-                System.out.println("test");
             } else if (r == 1) {
                 enemies[i].x = ((int) (Math.random() * 601));
                 enemies[i].y = 900;
@@ -114,27 +116,27 @@ public class Main implements Runnable, KeyListener {
     // this is the code that plays the game after you set things up
     public void run() {
         //for the moment we will loop things forever.
-        //game tics?
+        //game tics
         while (true) {
+//            for(int i=0;i<3;i++){
+//                System.out.println("Enemy "+i+", "+enemies[i].x+", "+enemies[i].y+", timer: "+timer);
+//            }
             if (gamePlaying) {
                 moveThings();  //move all the game objects
                 collisions();
-                boolean repeat1 =true;
-                boolean repeat2 =true;
-                boolean repeat3 =true;
                 timer++;
 
-                if (timer > 40000 && repeat1) {
+                if (timer > 2000 && repeat3) {
                     pickSides(2);
-                    repeat1 = false;
+                    repeat3 = false;
                 }
-                else if (timer > 25000 && repeat2) {
+                else if (timer > 1000 && repeat2) {
                     pickSides(1);
                     repeat2 = false;
                 }
-                else if (timer > 0 && repeat3) {
+                else if (timer > 0 && repeat1) {
                     pickSides(0);
-                    repeat3 = false;
+                    repeat1 = false;
                 }
 
             }
@@ -147,10 +149,16 @@ public class Main implements Runnable, KeyListener {
     public void moveThings() {
         //call the move() code for each object
         player.move(700, 1000);
-        for(int x=0;x<3;x++) {
-            enemies[x].move(player.x, player.y);
+        if (!repeat1){
+            enemies[0].move(player.x, player.y);
         }
-        System.out.println(enemies[0].x + ", " + enemies[0].y);
+        if (!repeat2){
+            enemies[1].move(player.x, player.y);
+        }
+        if (!repeat3){
+            enemies[2].move(player.x, player.y);
+        }
+        //System.out.println(enemies[2].x + ", " + enemies[0].y);
     }
 
     public void collisions(){
@@ -184,9 +192,12 @@ public class Main implements Runnable, KeyListener {
                 g.drawImage(walls[x].pic, walls[x].x, walls[x].y, walls[x].width, walls[x].height, null);
                 g.drawRect(walls[x].hitBox.x, walls[x].hitBox.y, walls[x].hitBox.width, walls[x].hitBox.height);
             }
+            g.setColor(Color.red);
+            g.setFont(new Font("Times Roman", Font.BOLD, 25));
+            g.drawString("HEALTH: "+player.health, 410, 80);
             for (int x = 0; x < 3; x++) {
                 g.drawImage(enemies[x].pic, enemies[x].x, enemies[x].y, enemies[x].width, enemies[x].height, null);
-                g.drawRect(enemies[x].hitBox.x, enemies[x].hitBox.y, enemies[x].hitBox.width, enemies[x].hitBox.height);
+                //g.drawRect(enemies[x].hitBox.x, enemies[x].hitBox.y, enemies[x].hitBox.width, enemies[x].hitBox.height);
             }
 
         }//game

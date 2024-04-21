@@ -8,7 +8,7 @@ public class Player {
     public int dy=6;
     public int width=100;
     public int height=100;
-    public int health = 3;
+    public int health = 5;
     public Rectangle hitBox;
     public boolean upIsPressed=false;
     public boolean downIsPressed=false;
