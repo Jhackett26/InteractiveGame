@@ -45,6 +45,9 @@ public class Main implements Runnable, KeyListener {
     boolean repeat1 =true;
     boolean repeat2 =true;
     boolean repeat3 =true;
+    int timeWhenHit;
+    boolean iFrames = false;
+    int deadEnemies = 0;
 
     /*** Arrays
      * Step 1: declare
@@ -162,10 +165,18 @@ public class Main implements Runnable, KeyListener {
     }
 
     public void collisions(){
-//        for(int x=0;x<3;x++) {
-//        if(){
-//
-//        }
+        if (!gameOver){
+            for (int i = 0; i < 3; i++) {
+                if (player.hitBox.intersects(enemies[i].hitBox) && !iFrames) {
+                    timeWhenHit = timer;
+                    player.health -= 1;
+                    iFrames = true;
+                }
+                if ((timer - timeWhenHit) > 65) {
+                    iFrames = false;
+                }
+            }
+        }
 
     }
 
@@ -173,7 +184,17 @@ public class Main implements Runnable, KeyListener {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-
+        if (player.health<1){
+            gameOver=true;
+        }
+        for(int i=0;i<3;i++){
+            if (enemies[i].health<1){
+                deadEnemies+=1;
+            }
+        }
+        if(deadEnemies>=3){
+            gameOver=true;
+        }
         if (gamePlaying==false) {
             g.setColor(Color.pink);
             g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -201,11 +222,19 @@ public class Main implements Runnable, KeyListener {
             }
 
         }//game
-        else if (gameOver) {
-
+        else if (gameOver && player.health>0) {
+            g.setColor(Color.pink);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.white);
+            g.setFont(new Font("Times Roman", Font.BOLD, 50));
+            g.drawString("YOU WIN!!!", 200, 400);
         }//win
-        else if (gameOver) {
-
+        else if (gameOver && player.health<1) {
+            g.setColor(Color.pink);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.white);
+            g.setFont(new Font("Times Roman", Font.BOLD, 50));
+            g.drawString("YOU LOSE", 200, 400);
         }//lose
         g.dispose();
         bufferStrategy.show();
@@ -260,22 +289,36 @@ public class Main implements Runnable, KeyListener {
         char key = e.getKeyChar();
         int keyCode = e.getKeyCode();
         if (keyCode == 87) {
-            player.upIsPressed = true;
+            player.wIsPressed = true;
         }
         if (keyCode == 83) {
-            player.downIsPressed = true;
+            player.sIsPressed = true;
+        }
+        if (keyCode == 65) {
+            player.aIsPressed = true;
+        }
+        if (keyCode == 68) {
+            player.dIsPressed = true;
+        }
+
+        if (keyCode == 38) {
+            player.upIsPressed = true;
+        }
+        if (keyCode == 40) {
+            player.sIsPressed = true;
         }
         if (keyCode == 65) {
             player.leftIsPressed = true;
         }
-        if (keyCode == 68) {
+        if (keyCode == 39) {
             player.rightIsPressed = true;
         }
+
         if (!gamePlaying && keyCode == 32) {
             gamePlaying=true;
         }
+        System.out.println("Key Pressed: "+key+", "+keyCode);
     }
-//        System.out.println("Key Pressed: "+key+", "+keyCode);
         // up = 38
         //down = 40
         //left = 37
@@ -287,16 +330,16 @@ public class Main implements Runnable, KeyListener {
         char key = e.getKeyChar();
         int keyCode = e.getKeyCode();
         if (keyCode == 87){
-            player.upIsPressed = false;
+            player.wIsPressed = false;
         }
         if (keyCode == 83){
-            player.downIsPressed=false;
+            player.sIsPressed =false;
         }
         if (keyCode == 65){
-            player.leftIsPressed=false;
+            player.aIsPressed =false;
         }
         if (keyCode == 68){
-            player.rightIsPressed=false;
+            player.dIsPressed =false;
         }
     }
 }

@@ -10,26 +10,30 @@ public class Player {
     public int height=100;
     public int health = 5;
     public Rectangle hitBox;
-    public boolean upIsPressed=false;
-    public boolean downIsPressed=false;
-    public boolean leftIsPressed=false;
-    public boolean rightIsPressed=false;
+    public boolean wIsPressed =false;
+    public boolean sIsPressed =false;
+    public boolean aIsPressed =false;
+    public boolean dIsPressed =false;
+    public boolean upIsPressed =false;
+    public boolean downIsPressed =false;
+    public boolean leftIsPressed =false;
+    public boolean rightIsPressed =false;
     public Player(int paramX,int paramY){
         x = paramX;
         y = paramY;
         hitBox = new Rectangle(x+25,y,width/2,height);
     }
     public void move(int screenWidth, int screenHeight){
-        if (upIsPressed){
+        if (wIsPressed){
             y-=dy;
         }
-        if(downIsPressed){
+        if(sIsPressed){
             y+=dy;
         }
-        if (leftIsPressed){
+        if (aIsPressed){
             x-=dx;
         }
-        if(rightIsPressed){
+        if(dIsPressed){
             x+=dx;
         }
         if (y < 50){
