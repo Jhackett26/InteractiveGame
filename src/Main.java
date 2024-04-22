@@ -45,9 +45,8 @@ public class Main implements Runnable, KeyListener {
     boolean repeat1 =true;
     boolean repeat2 =true;
     boolean repeat3 =true;
-    int timeWhenHit;
-    boolean iFrames = false;
     int deadEnemies = 0;
+    int timeWhenAttack;
 
     public SoundFile grunt;
     public SoundFile attack;
@@ -56,6 +55,7 @@ public class Main implements Runnable, KeyListener {
     public Sword dSword;
     public Sword lSword;
     public Sword rSword;
+    public String directionAttacked;
 
 
     /*** Arrays
@@ -182,24 +182,33 @@ public class Main implements Runnable, KeyListener {
         if (!repeat3){
             enemies[2].move(player.x, player.y);
         }
-        uSword.hitBox = new Rectangle(uSword.x,uSword.y,100,100);
-        dSword.hitBox = new Rectangle(dSword.x,dSword.y,100,100);
-        lSword.hitBox = new Rectangle(lSword.x,lSword.y,100,100);
-        rSword.hitBox = new Rectangle(rSword.x,rSword.y,100,100);
+        uSword.hitBox = new Rectangle(player.x,player.y-120,120,120);
+        dSword.hitBox = new Rectangle(player.x,player.y+120,120,120);
+        lSword.hitBox = new Rectangle(player.x-120,player.y,120,120);
+        rSword.hitBox = new Rectangle(player.x+50,player.y,120,120);
         //System.out.println(enemies[2].x + ", " + enemies[0].y);
     }
 
     public void collisions(){
         if (!gameOver){
             for (int i = 0; i < 3; i++) {
-                if (player.hitBox.intersects(enemies[i].hitBox) && !iFrames) {
-                    timeWhenHit = timer;
+                if (player.hitBox.intersects(enemies[i].hitBox) && !player.iFrames && enemies[i].health>0) {
+                    player.timeWhenHit = timer;
                     player.health -= 1;
-                    iFrames = true;
+                    player.iFrames = true;
                     grunt.play();
                 }
-                if ((timer - timeWhenHit) > 65) {
-                    iFrames = false;
+                if ((timer - player.timeWhenHit) > 65) {
+                    player.iFrames = false;
+                }
+                if (uSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames) {
+                    enemies[i].timeWhenHit = timer;
+                    enemies[i].health -= 1;
+                    System.out.println(enemies[i].health);
+                    enemies[i].iFrames = true;
+                }
+                if ((timer - enemies[i].timeWhenHit) > 65) {
+                    enemies[i].iFrames = false;
                 }
             }
         }
@@ -213,12 +222,8 @@ public class Main implements Runnable, KeyListener {
         if (player.health<1){
             gameOver=true;
         }
-        for(int i=0;i<3;i++){
-            if (enemies[i].health<1){
-                deadEnemies+=1;
-            }
-        }
-        if(deadEnemies>=3){
+
+        if (enemies[0].health<1 && enemies[1].health<1 && enemies[2].health<1){
             gameOver=true;
         }
         if (gamePlaying==false) {
@@ -245,25 +250,57 @@ public class Main implements Runnable, KeyListener {
             g.setColor(Color.red);
             g.setFont(new Font("Times Roman", Font.BOLD, 25));
             g.drawString("HEALTH: "+player.health, 410, 80);
-            for (int x = 0; x < 3; x++) {
-                g.drawImage(enemies[x].pic, enemies[x].x, enemies[x].y, enemies[x].width, enemies[x].height, null);
-                //g.drawRect(enemies[x].hitBox.x, enemies[x].hitBox.y, enemies[x].hitBox.width, enemies[x].hitBox.height);
+            for (int i = 0; i < 3; i++) {
+                if(enemies[i].health>0){
+                g.drawImage(enemies[i].pic, enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height, null);
+                //g.drawRect(enemies[i].hitBox.x, enemies[i].hitBox.y, enemies[i].hitBox.width, enemies[i].hitBox.height);
             }
-            if (player.upIsPressed) {
-                g.drawImage(uSword.pic, player.x, player.y-100, 100, 100, null);
-                g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
             }
-            if (player.downIsPressed) {
-                g.drawImage(dSword.pic, player.x, player.y+100, 100, 100, null);
-                g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+
+            //Render Sword
+            if(timer-timeWhenAttack > 35) {
+                if (player.upIsPressed) {
+                    g.drawImage(uSword.pic, player.x, player.y - 100, 100, 100, null);
+                    g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+                    timeWhenAttack = timer;
+                    directionAttacked = "up";
+                }
+                if (player.downIsPressed) {
+                    g.drawImage(dSword.pic, player.x, player.y + 100, 100, 100, null);
+                    g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+                    timeWhenAttack = timer;
+                    directionAttacked = "down";
+                }
+                if (player.leftIsPressed) {
+                    g.drawImage(lSword.pic, player.x - 100, player.y, 100, 100, null);
+                    g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
+                    timeWhenAttack = timer;
+                    directionAttacked = "left";
+                }
+                if (player.rightIsPressed) {
+                    g.drawImage(rSword.pic, player.x + 50, player.y, 100, 100, null);
+                    g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+                    timeWhenAttack = timer;
+                    directionAttacked = "right";
+                }
             }
-            if (player.leftIsPressed) {
-                g.drawImage(lSword.pic, player.x-100, player.y, 100, 100, null);
-                g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
-            }
-            if (player.rightIsPressed) {
-                g.drawImage(rSword.pic, player.x+50, player.y, 100, 100, null);
-                g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+            else{
+                if(directionAttacked == "up"){
+                    g.drawImage(uSword.pic, player.x, player.y - 120, 120, 120, null);
+                    g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+                }
+                if(directionAttacked == "down"){
+                    g.drawImage(dSword.pic, player.x, player.y + 120, 120, 120, null);
+                    g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+                }
+                if(directionAttacked == "left"){
+                    g.drawImage(lSword.pic, player.x - 120, player.y, 120, 120, null);
+                    g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
+                }
+                if(directionAttacked == "right"){
+                    g.drawImage(rSword.pic, player.x + 50, player.y, 120, 120, null);
+                    g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+                }
             }
 
         }//game
@@ -345,7 +382,6 @@ public class Main implements Runnable, KeyListener {
         if (keyCode == 68) {
             player.dIsPressed = true;
         }
-
         if (keyCode == 38) {
             player.upIsPressed = true;
         }
@@ -385,6 +421,18 @@ public class Main implements Runnable, KeyListener {
         }
         if (keyCode == 68){
             player.dIsPressed =false;
+        }
+        if (keyCode == 38) {
+            player.upIsPressed = false;
+        }
+        if (keyCode == 40) {
+            player.downIsPressed = false;
+        }
+        if (keyCode == 37) {
+            player.leftIsPressed = false;
+        }
+        if (keyCode == 39) {
+            player.rightIsPressed = false;
         }
     }
 }

@@ -18,7 +18,8 @@ public class Player {
     public boolean downIsPressed =false;
     public boolean leftIsPressed =false;
     public boolean rightIsPressed =false;
-    public boolean isAttacking = false;
+    public boolean iFrames;
+    public int timeWhenHit;
     public Player(int paramX,int paramY){
         x = paramX;
         y = paramY;
