@@ -9,7 +9,7 @@ public class Enemy {
     public boolean isAlive = true;
     public Rectangle hitBox;
     public int randomStart;
-    public int health = 4;
+    public int health = 10;
     public boolean iFrames;
     public int timeWhenHit;
     public Enemy(int paramX,int paramY){

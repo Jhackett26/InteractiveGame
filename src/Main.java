@@ -109,6 +109,10 @@ public class Main implements Runnable, KeyListener {
         lSword.pic = Toolkit.getDefaultToolkit().getImage("attackL.png");
         rSword = new Sword();
         rSword.pic = Toolkit.getDefaultToolkit().getImage("attackR.png");
+        uSword.hitBox = new Rectangle(player.x,player.y-120,120,120);
+        dSword.hitBox = new Rectangle(player.x,player.y+100,120,120);
+        lSword.hitBox = new Rectangle(player.x-120,player.y,120,120);
+        rSword.hitBox = new Rectangle(player.x+100,player.y,120,120);
 
 
     } // end BasicGameApp constructor
@@ -142,19 +146,24 @@ public class Main implements Runnable, KeyListener {
         //for the moment we will loop things forever.
         //game tics
         while (true) {
-//            for(int i=0;i<3;i++){
-//                System.out.println("Enemy "+i+", "+enemies[i].x+", "+enemies[i].y+", timer: "+timer);
-//            }
             if (gamePlaying) {
                 moveThings();  //move all the game objects
                 collisions();
                 timer++;
+                uSword.hitBox.x=player.x;
+                uSword.hitBox.y=player.y-120;
+                dSword.hitBox.x=player.x;
+                dSword.hitBox.y=player.y+100;
+                lSword.hitBox.x=player.x-120;
+                lSword.hitBox.y=player.y;
+                rSword.hitBox.x=player.x+100;
+                rSword.hitBox.y=player.y;
 
-                if (timer > 2000 && repeat3 || deadEnemies==2) {
+                if ((timer > 2000 && repeat3) || (deadEnemies==2 && repeat3)) {
                     pickSides(2);
                     repeat3 = false;
                 }
-                else if (timer > 1000 && repeat2 || deadEnemies==1) {
+                else if ((timer > 1000 && repeat2) || (deadEnemies==1 && repeat2)) {
                     pickSides(1);
                     repeat2 = false;
                 }
@@ -182,11 +191,6 @@ public class Main implements Runnable, KeyListener {
         if (!repeat3){
             enemies[2].move(player.x, player.y);
         }
-        uSword.hitBox = new Rectangle(player.x,player.y-120,120,120);
-        dSword.hitBox = new Rectangle(player.x,player.y+120,120,120);
-        lSword.hitBox = new Rectangle(player.x-120,player.y,120,120);
-        rSword.hitBox = new Rectangle(player.x+50,player.y,120,120);
-        //System.out.println(enemies[2].x + ", " + enemies[0].y);
     }
 
     public void collisions(){
@@ -198,16 +202,34 @@ public class Main implements Runnable, KeyListener {
                     player.iFrames = true;
                     grunt.play();
                 }
-                if ((timer - player.timeWhenHit) > 65) {
+                if ((timer - player.timeWhenHit) > 50) {
                     player.iFrames = false;
                 }
-                if (uSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames) {
+                if (uSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && uSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
-                    System.out.println(enemies[i].health);
+                    System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
                 }
-                if ((timer - enemies[i].timeWhenHit) > 65) {
+                if (dSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && dSword.isActive) {
+                    enemies[i].timeWhenHit = timer;
+                    enemies[i].health -= 1;
+                    System.out.println("enemy: "+i+", "+enemies[i].health);
+                    enemies[i].iFrames = true;
+                }
+                if (rSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && rSword.isActive) {
+                    enemies[i].timeWhenHit = timer;
+                    enemies[i].health -= 1;
+                    System.out.println("enemy: "+i+", "+enemies[i].health);
+                    enemies[i].iFrames = true;
+                }
+                if (lSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && lSword.isActive) {
+                    enemies[i].timeWhenHit = timer;
+                    enemies[i].health -= 1;
+                    System.out.println("enemy: "+i+", "+enemies[i].health);
+                    enemies[i].iFrames = true;
+                }
+                if ((timer - enemies[i].timeWhenHit) > 20) {
                     enemies[i].iFrames = false;
                 }
             }
@@ -226,26 +248,24 @@ public class Main implements Runnable, KeyListener {
         if (enemies[0].health<1 && enemies[1].health<1 && enemies[2].health<1){
             gameOver=true;
         }
-        if (gamePlaying==false) {
+        if (!gamePlaying) {
             g.setColor(Color.pink);
             g.fillRect(0, 0, WIDTH, HEIGHT);
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
 
-            g.drawString(" WASD TO MOVE", 200, 250);
-            g.drawString(" ARROW KEYS TO ATTACK",200 , 325);
-            g.drawString(" PRESS SPACE TO BEGIN", 200, 400);
+            g.drawString(" WASD TO MOVE", 260, 250);
+            g.drawString(" ARROW KEYS TO ATTACK",160 , 325);
+            g.drawString(" PRESS SPACE TO BEGIN", 190, 400);
         }//start screen
         else if (gamePlaying && !gameOver) {
             g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
             //g.drawImage(oliverPic,500,0,300,300,null);
             if (player.health > 0) {
                 g.drawImage(player.pic, player.x, player.y, player.width, player.height, null);
-                //g.drawRect(player.hitBox.x, player.hitBox.y, player.hitBox.width, player.hitBox.height);
             }
             for (int x = 0; x <= 3; x++) {
                 g.drawImage(walls[x].pic, walls[x].x, walls[x].y, walls[x].width, walls[x].height, null);
-                g.drawRect(walls[x].hitBox.x, walls[x].hitBox.y, walls[x].hitBox.width, walls[x].hitBox.height);
             }
             g.setColor(Color.red);
             g.setFont(new Font("Times Roman", Font.BOLD, 25));
@@ -253,55 +273,86 @@ public class Main implements Runnable, KeyListener {
             for (int i = 0; i < 3; i++) {
                 if(enemies[i].health>0){
                 g.drawImage(enemies[i].pic, enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height, null);
-                //g.drawRect(enemies[i].hitBox.x, enemies[i].hitBox.y, enemies[i].hitBox.width, enemies[i].hitBox.height);
             }
+                if(enemies[i].health ==0){
+                    deadEnemies+=1;
+                    enemyDead.play();
+                    enemies[i].health=-1;
+                }
+
             }
 
             //Render Sword
-            if(timer-timeWhenAttack > 35) {
+
+
+
+            if(timer-timeWhenAttack > 15) {
                 if (player.upIsPressed) {
                     g.drawImage(uSword.pic, player.x, player.y - 100, 100, 100, null);
-                    g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
                     timeWhenAttack = timer;
-                    directionAttacked = "up";
+                    directionAttacked="up";
+                    attack.play();
+                    uSword.isActive=true;
                 }
-                if (player.downIsPressed) {
+                else if (player.downIsPressed) {
                     g.drawImage(dSword.pic, player.x, player.y + 100, 100, 100, null);
-                    g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
                     timeWhenAttack = timer;
                     directionAttacked = "down";
+                    attack.play();
+                    dSword.isActive=true;
                 }
-                if (player.leftIsPressed) {
+                else if (player.leftIsPressed) {
                     g.drawImage(lSword.pic, player.x - 100, player.y, 100, 100, null);
-                    g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
                     timeWhenAttack = timer;
                     directionAttacked = "left";
+                    attack.play();
+                    lSword.isActive=true;
                 }
-                if (player.rightIsPressed) {
-                    g.drawImage(rSword.pic, player.x + 50, player.y, 100, 100, null);
-                    g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+                else if (player.rightIsPressed) {
+                    g.drawImage(rSword.pic, player.x + 100, player.y, 100, 100, null);
                     timeWhenAttack = timer;
                     directionAttacked = "right";
+                    attack.play();
+                    rSword.isActive=true;
+                }
+                else{
+                    uSword.isActive=false;
+                    dSword.isActive=false;
+                    lSword.isActive=false;
+                    rSword.isActive=false;
                 }
             }
             else{
                 if(directionAttacked == "up"){
-                    g.drawImage(uSword.pic, player.x, player.y - 120, 120, 120, null);
-                    g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+                    g.drawImage(uSword.pic, player.x, player.y-120, 120, 120, null);
                 }
-                if(directionAttacked == "down"){
-                    g.drawImage(dSword.pic, player.x, player.y + 120, 120, 120, null);
-                    g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+                else if(directionAttacked == "down"){
+                    g.drawImage(dSword.pic, player.x, player.y + 100, 120, 120, null);
                 }
-                if(directionAttacked == "left"){
+                else if(directionAttacked == "left"){
                     g.drawImage(lSword.pic, player.x - 120, player.y, 120, 120, null);
-                    g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
                 }
-                if(directionAttacked == "right"){
-                    g.drawImage(rSword.pic, player.x + 50, player.y, 120, 120, null);
-                    g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+                else if(directionAttacked == "right"){
+                    g.drawImage(rSword.pic, player.x + 100, player.y, 120, 120, null);
+                }
+                else{
+                    uSword.isActive=false;
+                    dSword.isActive=false;
+                    lSword.isActive=false;
+                    rSword.isActive=false;
                 }
             }
+            //hitboxes
+            g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+            g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
+            g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+            g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+            g.drawRect(player.hitBox.x, player.hitBox.y, player.hitBox.width, player.hitBox.height);
+            for(int i=0;i<3;i++){
+                g.drawRect(enemies[i].hitBox.x, enemies[i].hitBox.y, enemies[i].hitBox.width, enemies[i].hitBox.height);
+            }
+
+
 
         }//game
         else if (gameOver && player.health>0) {
@@ -309,14 +360,14 @@ public class Main implements Runnable, KeyListener {
             g.fillRect(0, 0, WIDTH, HEIGHT);
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
-            g.drawString("YOU WIN!!!", 200, 400);
+            g.drawString("YOU WIN!!!", 355, 350);
         }//win
         else if (gameOver && player.health<1) {
             g.setColor(Color.pink);
             g.fillRect(0, 0, WIDTH, HEIGHT);
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
-            g.drawString("YOU LOSE", 200, 400);
+            g.drawString("YOU LOSE", 360, 350);
         }//lose
         g.dispose();
         bufferStrategy.show();
@@ -368,7 +419,6 @@ public class Main implements Runnable, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         // 3 do this
-        char key = e.getKeyChar();
         int keyCode = e.getKeyCode();
         if (keyCode == 87) {
             player.wIsPressed = true;
@@ -408,7 +458,6 @@ public class Main implements Runnable, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        char key = e.getKeyChar();
         int keyCode = e.getKeyCode();
         if (keyCode == 87){
             player.wIsPressed = false;

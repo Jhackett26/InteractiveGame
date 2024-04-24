@@ -6,8 +6,8 @@ public class Sword {
     public int y;
     public int width=20;
     public int height=20;
-    public boolean isAlive = true;
     public Rectangle hitBox;
+    public boolean isActive = false;
     public Sword(){
         hitBox = new Rectangle(x,y,width,height);
     }

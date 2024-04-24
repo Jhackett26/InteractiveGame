@@ -5,7 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sword.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1713740842091</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="close enough">
+      <created>1713751972854</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1713751972854</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -116,7 +123,8 @@
     <MESSAGE value="added directional attack input&#10;&#10;need to add:&#10;-enemy damage&#10;-sfx&#10;-bullets (maybe sword?)" />
     <MESSAGE value="changed plan to sword not bullets and added sfx&#10;&#10;need sword + enemy damage" />
     <MESSAGE value="Added sword + swinging&#10;&#10;need to make swinging temporary&#10;need to give sword damage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added sword + swinging&#10;&#10;need to make swinging temporary&#10;need to give sword damage" />
+    <MESSAGE value="close enough" />
+    <option name="LAST_COMMIT_MESSAGE" value="close enough" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -125,6 +133,16 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>165</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>161</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
