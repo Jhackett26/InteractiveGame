@@ -8,32 +8,31 @@ public class Enemy {
     public int height=100;
     public boolean isAlive = true;
     public Rectangle hitBox;
-    public int randomStart;
     public int health = 10;
     public boolean iFrames;
     public int timeWhenHit;
     public Enemy(int paramX,int paramY){
         x = paramX;
         y = paramY;
-        hitBox = new Rectangle(x,y,width,height);
+        hitBox = new Rectangle(x+25,y,75,height);
     }
     public void move(int PlayerxPos,int PlayeryPos){
         if(x < PlayerxPos){
-            x+=2;
+            x+=3;
         }
         if(x > PlayerxPos){
-            x-=2;
+            x-=3;
         }
         if(y < PlayeryPos){
-            y+=2;
+            y+=3;
         }
         if(y > PlayeryPos){
-            y-=2;
+            y-=3;
         }
 //        for(int randNum=0;randNum<=3;randNum++){
 //            if enemies[x].randomStart=
 //        }
-        hitBox = new Rectangle(x,y,width,height);
+        hitBox = new Rectangle(x+25,y,75,height);
     }
 }
 

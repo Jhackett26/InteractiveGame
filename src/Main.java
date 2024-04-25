@@ -120,17 +120,17 @@ public class Main implements Runnable, KeyListener {
     public void pickSides(int i){
         int r = (int)(Math.random()*4);
             if (r == 0) {
-                enemies[i].x = ((int) (Math.random() * 601));
-                enemies[i].y = 0;
+                enemies[i].x = ((int) (Math.random() * 700));
+                enemies[i].y = -100;
             } else if (r == 1) {
-                enemies[i].x = ((int) (Math.random() * 601));
-                enemies[i].y = 900;
+                enemies[i].x = ((int) (Math.random() * 700));
+                enemies[i].y = 1000;
             } else if (r == 2) {
                 enemies[i].x = 0;
-                enemies[i].y = ((int) (Math.random() * 901));
+                enemies[i].y = ((int) (Math.random() * 1000));
             } else if (r == 3) {
-                enemies[i].x = 600;
-                enemies[i].y = ((int) (Math.random() * 901));
+                enemies[i].x = 700;
+                enemies[i].y = ((int) (Math.random() * 1000));
             }
         }
 
@@ -210,26 +210,30 @@ public class Main implements Runnable, KeyListener {
                     enemies[i].health -= 1;
                     System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
+                    enemies[i].y-=25;
                 }
                 if (dSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && dSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
                     System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
+                    enemies[i].y-=25;
                 }
                 if (rSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && rSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
                     System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
+                    enemies[i].x+=25;
                 }
                 if (lSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && lSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
                     System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
+                    enemies[i].x-=25;
                 }
-                if ((timer - enemies[i].timeWhenHit) > 20) {
+                if ((timer - enemies[i].timeWhenHit) > 61) {
                     enemies[i].iFrames = false;
                 }
             }
@@ -286,7 +290,7 @@ public class Main implements Runnable, KeyListener {
 
 
 
-            if(timer-timeWhenAttack > 15) {
+            if(timer-timeWhenAttack > 60) {
                 if (player.upIsPressed) {
                     g.drawImage(uSword.pic, player.x, player.y - 100, 100, 100, null);
                     timeWhenAttack = timer;
@@ -322,7 +326,7 @@ public class Main implements Runnable, KeyListener {
                     rSword.isActive=false;
                 }
             }
-            else{
+            if(timer-timeWhenAttack <= 15) {
                 if(directionAttacked == "up"){
                     g.drawImage(uSword.pic, player.x, player.y-120, 120, 120, null);
                 }
@@ -343,14 +347,14 @@ public class Main implements Runnable, KeyListener {
                 }
             }
             //hitboxes
-            g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
-            g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
-            g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
-            g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
-            g.drawRect(player.hitBox.x, player.hitBox.y, player.hitBox.width, player.hitBox.height);
-            for(int i=0;i<3;i++){
-                g.drawRect(enemies[i].hitBox.x, enemies[i].hitBox.y, enemies[i].hitBox.width, enemies[i].hitBox.height);
-            }
+//            g.drawRect(rSword.hitBox.x, rSword.hitBox.y, rSword.hitBox.width, rSword.hitBox.height);
+//            g.drawRect(lSword.hitBox.x, lSword.hitBox.y, lSword.hitBox.width, lSword.hitBox.height);
+//            g.drawRect(dSword.hitBox.x, dSword.hitBox.y, dSword.hitBox.width, dSword.hitBox.height);
+//            g.drawRect(uSword.hitBox.x, uSword.hitBox.y, uSword.hitBox.width, uSword.hitBox.height);
+//            g.drawRect(player.hitBox.x, player.hitBox.y, player.hitBox.width, player.hitBox.height);
+//            for(int i=0;i<3;i++){
+//                g.drawRect(enemies[i].hitBox.x, enemies[i].hitBox.y, enemies[i].hitBox.width, enemies[i].hitBox.height);
+//            }
 
 
 
