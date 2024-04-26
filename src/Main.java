@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 //*******************************************************************************
 // 1 KeyListener (Tab complete)
 public class Main implements Runnable, KeyListener {
-
     //Variable Definition Section
     //Declare the variables used in the program
     //You can set their initial values too
@@ -35,7 +34,6 @@ public class Main implements Runnable, KeyListener {
     public JPanel panel;
     public boolean gamePlaying = false;
     public boolean gameOver = false;
-    public boolean gamePaused = false;
     public Player player;
     public Wall[] walls;
     public BufferStrategy bufferStrategy;
@@ -89,7 +87,6 @@ public class Main implements Runnable, KeyListener {
             walls[x + 2] = new Wall(x * 950, 0, 50, 700);
             walls[x + 2].pic = Toolkit.getDefaultToolkit().getImage("wall.jpeg");
         }
-        //___ = new SoundFile(filename);
         enemies = new Enemy[3];
         /***
          * Step 3: fill
@@ -208,28 +205,24 @@ public class Main implements Runnable, KeyListener {
                 if (uSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && uSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
-                    System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
                     enemies[i].y-=25;
                 }
                 if (dSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && dSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
-                    System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
-                    enemies[i].y-=25;
+                    enemies[i].y+=25;
                 }
                 if (rSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && rSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
-                    System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
                     enemies[i].x+=25;
                 }
                 if (lSword.hitBox.intersects(enemies[i].hitBox) && !enemies[i].iFrames && lSword.isActive) {
                     enemies[i].timeWhenHit = timer;
                     enemies[i].health -= 1;
-                    System.out.println("enemy: "+i+", "+enemies[i].health);
                     enemies[i].iFrames = true;
                     enemies[i].x-=25;
                 }
@@ -264,9 +257,8 @@ public class Main implements Runnable, KeyListener {
         }//start screen
         else if (gamePlaying && !gameOver) {
             g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-            //g.drawImage(oliverPic,500,0,300,300,null);
             if (player.health > 0) {
-                g.drawImage(player.pic, player.x, player.y, player.width, player.height, null);
+                g.drawImage(player.pic, player.x, player.y, 100, 100, null);
             }
             for (int x = 0; x <= 3; x++) {
                 g.drawImage(walls[x].pic, walls[x].x, walls[x].y, walls[x].width, walls[x].height, null);
@@ -279,8 +271,8 @@ public class Main implements Runnable, KeyListener {
                 g.drawImage(enemies[i].pic, enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height, null);
             }
                 if(enemies[i].health ==0){
-                    deadEnemies+=1;
                     enemyDead.play();
+                    deadEnemies+=1;
                     enemies[i].health=-1;
                 }
 
@@ -365,6 +357,7 @@ public class Main implements Runnable, KeyListener {
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
             g.drawString("YOU WIN!!!", 355, 350);
+            g.drawString("PRESS SPACE TO RESTART",170,410);
         }//win
         else if (gameOver && player.health<1) {
             g.setColor(Color.pink);
@@ -372,6 +365,7 @@ public class Main implements Runnable, KeyListener {
             g.setColor(Color.white);
             g.setFont(new Font("Times Roman", Font.BOLD, 50));
             g.drawString("YOU LOSE", 360, 350);
+            g.drawString("PRESS SPACE TO RESTART",170,410);
         }//lose
         g.dispose();
         bufferStrategy.show();
@@ -448,16 +442,33 @@ public class Main implements Runnable, KeyListener {
         if (keyCode == 39) {
             player.rightIsPressed = true;
         }
-
+        //start
         if (!gamePlaying && keyCode == 32) {
             gamePlaying=true;
         }
-//        System.out.println("Key Pressed: "+key+", "+keyCode);
+        //restart
+        if(gamePlaying && gameOver && keyCode ==32){
+            for(int i=0;i<3;i++){
+                enemies[i].x = -100;
+                enemies[i].y = -100;
+                enemies[i].hitBox.x=-100;
+                enemies[i].hitBox.y=-100;
+                enemies[i].iFrames = false;
+                enemies[i].health = 10;
+            }
+            player.health = 3;
+            player.x = 400;
+            player.y = 400;
+            timer=1;
+            timeWhenAttack=0;
+            deadEnemies = 0;
+            repeat1 =true;
+            repeat2 =true;
+            repeat3 =true;
+            player.iFrames = false;
+            gameOver = false;
+        }
     }
-        // up = 38
-        //down = 40
-        //left = 37
-        //right = 39
 
 
     @Override

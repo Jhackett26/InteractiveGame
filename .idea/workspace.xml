@@ -6,6 +6,7 @@
       <change beforePath="$PROJECT_DIR$/src/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sword.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1714002647101</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Done(probably)">
+      <created>1714004491365</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1714004491365</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -132,7 +140,8 @@
     <MESSAGE value="Added sword + swinging&#10;&#10;need to make swinging temporary&#10;need to give sword damage" />
     <MESSAGE value="close enough" />
     <MESSAGE value="Almost done&#10;want to add knockback to attacks that connect" />
-    <option name="LAST_COMMIT_MESSAGE" value="Almost done&#10;want to add knockback to attacks that connect" />
+    <MESSAGE value="Done(probably)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Done(probably)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
